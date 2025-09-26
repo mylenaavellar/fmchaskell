@@ -70,14 +70,14 @@ monus (S n) (S m) = monus n m
 -- multiplication
 (*) :: Nat -> Nat -> Nat
 O * _ = O
-n * S m = n * m + n
+n * (S m) = n * m + n
 
 infixl 7 *
 
 -- exponentiation
 (^) :: Nat -> Nat -> Nat
 _ ^ O = S O
-n ^ S m = n ^ m * n
+n ^ (S m) = n ^ m * n
 
 infixl 8 ^
 
@@ -87,16 +87,24 @@ _ / O = undefined
 O / _ = O
 n / m = 
   case n -* m of
-      O ->
-        case m -* n of
-          O -> S O
-          _ -> O
-      n -> S (n / m)
+    O ->
+      case m -* n of
+        O -> S O
+        _ -> O
+    k -> S (k / m)
 
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
-(%) = undefined
+_ % O = undefined
+O % _ = O
+n % m = 
+  case n -* m of
+    O ->
+      case m -* n of
+        O -> O
+        _ -> n
+    k -> k % m
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
@@ -114,11 +122,13 @@ absDiff = undefined
 (|-|) = absDiff
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial O = S O
+factorial (S n) = (S n) * factorial n
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg O = O
+sg _ = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
