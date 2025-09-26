@@ -69,7 +69,7 @@ monus (S n) (S m) = monus n m
 
 -- multiplication
 (*) :: Nat -> Nat -> Nat
-O * _ = O
+_ * O = O
 n * (S m) = n * m + n
 
 infixl 7 *
