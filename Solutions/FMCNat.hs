@@ -95,8 +95,9 @@ odd (S (S n)) = odd n
 ----------------------------------------------------------------
 
 -- addition
-(<+>) :: Nat -> Nat -> Nat
-(<+>) = undefined
+(+) :: Nat -> Nat -> Nat
+n + O   = n
+n + S m = S (n + m)
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
@@ -110,10 +111,11 @@ monus = undefined
 
 -- multiplication
 times :: Nat -> Nat -> Nat
-times = undefined
+_ `times` O = O
+n `times` (S m) = n `times` m + n
 
-(<*>) :: Nat -> Nat -> Nat
-(<*>) = times
+(*) :: Nat -> Nat -> Nat
+(*) = times
 
 -- power / exponentiation
 pow :: Nat -> Nat -> Nat

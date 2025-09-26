@@ -116,7 +116,9 @@ n % m =
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
 absDiff :: Nat -> Nat -> Nat
-absDiff = undefined
+O `absDiff` m = m
+n `absDiff` O = n
+(S n)  `absDiff` (S m) = n `absDiff` m
 
 (|-|) :: Nat -> Nat -> Nat
 (|-|) = absDiff
@@ -132,5 +134,10 @@ sg _ = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
-
+lo O _ = undefined
+lo _ O = undefined
+lo _ (S O) = O
+lo b a =
+  case a/b of
+    O -> O
+    k -> S (lo b k)
