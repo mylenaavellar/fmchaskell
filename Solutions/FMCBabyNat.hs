@@ -70,7 +70,7 @@ monus (S n) (S m) = monus n m
 -- multiplication
 (*) :: Nat -> Nat -> Nat
 O * _ = O
-n * (S m) = n * m + n
+n * S m = n * m + n
 
 infixl 7 *
 
@@ -83,7 +83,16 @@ infixl 8 ^
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
-(/) = undefined
+_ / O = undefined
+O / _ = O
+n / m = 
+  case n -* m of
+      O ->
+        case m -* n of
+          O -> S O
+          _ -> O
+      n -> S (n / m)
+
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
