@@ -141,7 +141,7 @@ exp = pow
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-_ </> O = undefined
+_ </> O = error "division by O"
 O </> _ = O
 n </> m = 
   case n <-> m of
@@ -153,16 +153,21 @@ n </> m =
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
-_ <%> O = undefined
+_ <%> O = error "division by O"
 n <%> m = n <-> (m <*> (n </> m))
 
 -- euclidean division
 eucdiv :: (Nat, Nat) -> (Nat, Nat)
-eucdiv = undefined
+eucdiv (_, O) = error "division by O"
+eucdiv (n, m) =
+  case n < m of
+    True -> (O, n)
+    False -> let (q, r) = eucdiv (n <-> m, m)
+              in (S q, r)
 
 -- divides
 (<|>) :: Nat -> Nat -> Bool
-O <|> _ = undefined
+O <|> _ = error "division by O"
 _ <|> O = True
 n <|> m =
   case m <%> n of
