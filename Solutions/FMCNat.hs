@@ -197,8 +197,8 @@ sg _ = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo O _ = undefined
-lo _ O = undefined
+lo O _ = error "logarithm with base 0 is undefined"
+lo _ O = error "logarithm of 0 is undefined"
 lo _ (S O) = O
 lo b a =
   case a </> b of
@@ -214,10 +214,15 @@ lo b a =
 -- Do NOT use the following functions in the definitions above!
 
 toNat :: Integral a => a -> Nat
-toNat = undefined
+toNat x
+    | x < 0     = error "negative numbers not allowed in Nat"
+    | x == 0    = O
+    | otherwise = S (toNat (x - 1))
+
 
 fromNat :: Integral a => Nat -> a
-fromNat = undefined
+fromNat O = 0
+fromNat (S n) = fromNat n + 1
 
 
 -- Voilá: we can now easily make Nat an instance of Num.
@@ -228,8 +233,9 @@ instance Num Nat where
     (-) = (<->)
     abs n = n
     signum = sg
+    
     fromInteger x
-      | x < 0     = undefined
-      | x == 0    = undefined
-      | otherwise = undefined
+      | x < 0     = error "negative numbers not allowed in Nat"
+      | x == 0    = O
+      | otherwise = S (fromInteger (x - 1))
 
