@@ -95,45 +95,57 @@ odd (S (S n)) = odd n
 ----------------------------------------------------------------
 
 -- addition
-(+) :: Nat -> Nat -> Nat
-n + O   = n
-n + S m = S (n + m)
+(<+>) :: Nat -> Nat -> Nat
+n <+> O   = n
+n <+> S m = S (n <+> m)
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 monus :: Nat -> Nat -> Nat
-monus = undefined
+O `monus` _ = O
+n `monus` O = n
+(S n) `monus` (S m) = monus n m
 
-(-*) :: Nat -> Nat -> Nat
-(-*) = undefined
+(<->) :: Nat -> Nat -> Nat
+(<->) = monus
 
 -- multiplication
 times :: Nat -> Nat -> Nat
 _ `times` O = O
 n `times` (S m) = n `times` m + n
 
-(*) :: Nat -> Nat -> Nat
-(*) = times
+(<*>) :: Nat -> Nat -> Nat
+(<*>) = times
 
 -- power / exponentiation
 pow :: Nat -> Nat -> Nat
-pow = undefined
+_ `pow` O = S O
+n `pow` (S m) = n `pow` m <*> n
 
 exp :: Nat -> Nat -> Nat
-exp = undefined
+exp = pow
 
 (<^>) :: Nat -> Nat -> Nat
-(<^>) = undefined
+(<^>) = pow
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
-(</>) = undefined
+_ </> O = undefined
+O </> _ = O
+n </> m = 
+  case n <-> m of
+    O ->
+      case m <-> n of
+        O -> S O
+        _ -> O
+    k -> S (k </> m)
 
 -- remainder
 (<%>) :: Nat -> Nat -> Nat
-(<%>) = undefined
+_ <%> O = undefined
+n <%> m = n <-> (m <*> (n </> m))
 
 -- euclidean division
 eucdiv :: (Nat, Nat) -> (Nat, Nat)
@@ -141,7 +153,12 @@ eucdiv = undefined
 
 -- divides
 (<|>) :: Nat -> Nat -> Bool
-(<|>) = undefined
+O <|> _ = undefined
+_ <|> O = True
+n <|> m =
+  case m <%> n of
+    O -> True
+    _ -> False
 
 divides = (<|>)
 
@@ -150,20 +167,30 @@ divides = (<|>)
 -- x `dist` y = |x - y|
 -- (Careful here: this - is the real minus operator!)
 dist :: Nat -> Nat -> Nat
-dist = undefined
+O `dist` m = m
+n `dist` O = n
+(S n)  `dist` (S m) = n `dist` m
 
 (|-|) = dist
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial O = S O
+factorial (S n) = (S n) <*> factorial n
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg O = O
+sg _ = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo O _ = undefined
+lo _ O = undefined
+lo _ (S O) = O
+lo b a =
+  case a </> b of
+    O -> O
+    k -> S (lo b k)
 
 
 ----------------------------------------------------------------
