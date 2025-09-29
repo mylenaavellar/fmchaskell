@@ -66,9 +66,13 @@ instance Ord Nat where
     -- Howevener, you should define them WITHOUT using (<=).
     -- Both are binary functions: max m n = ..., etc.
 
-    min = undefined
+    min O _ = O
+    min _ O = O
+    min (S n) (S m) = S (min n m)
 
-    max = undefined
+    max O n = n
+    max n O = n
+    max (S n) (S m) = S (max n m)
 
 
 ----------------------------------------------------------------
@@ -166,7 +170,6 @@ n <|> m =
     _ -> False
 
 divides = (<|>)
-
 
 -- distance between nats
 -- x `dist` y = |x - y|
