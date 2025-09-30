@@ -39,13 +39,15 @@ instance Enum Bool where
 
 -- conjunction (AND)
 (&&) :: Bool -> Bool -> Bool
-(&&) = undefined
+True && True = True
+_ && _ = False
 
 infixr 3 &&
 
 -- disjunction (OR)
 (||) :: Bool -> Bool -> Bool
-(||) = undefined
+False || False = False
+_ || _ = True
 
 infixr 2 ||
 
@@ -63,7 +65,9 @@ infixr 2 \|/
 
 -- XOR (exclusive disjunction)
 (<=/=>) :: Bool -> Bool -> Bool
-(<=/=>) = undefined
+True <=/=> False = True
+False <=/=> True = True
+_ <=/=> _ = False
 
 infixr 2 <=/=>
 
@@ -78,13 +82,15 @@ ifThenElse = undefined
 
 -- logical "implies"
 (==>) :: Bool -> Bool -> Bool
-(==>) = undefined
+True ==> False = False
+_ ==> _ = True
 
 infixr 1 ==>
 
 -- logical "implied by"
 (<==) :: Bool -> Bool -> Bool
-(<==) = undefined
+False <== True = False
+_ <== _ = True
 
 infixl 1 <==
 
