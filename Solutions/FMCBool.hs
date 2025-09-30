@@ -78,7 +78,10 @@ not False = True
 
 -- if-then-else expression
 ifThenElse :: Bool -> a -> a -> a
-ifThenElse = undefined
+ifThenElse p x y =
+    case p of
+        True -> x
+        False -> y
 
 -- logical "implies"
 (==>) :: Bool -> Bool -> Bool
@@ -99,5 +102,3 @@ infixl 1 <==
 p <=> q = (p ==> q) && (q ==> p)
 
 infixr 1 <=>
-
-
