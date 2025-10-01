@@ -30,15 +30,18 @@ flip f x y = f y x
 (.) f g x = f (g x)
 
 -- (.>) is composition but in diagramatic notation (should be ; but Haskell forbids)
+(.>) :: (a -> b) -> (b -> c) -> (a -> c)
 (.>) = flip (.)
 
 -- ($) takes a function and a suitable argument and applies the function to the argument
--- think: why would we ever want that?
+-- think: why would we ever want that? 
+($) :: (a -> b) -> a -> b
+f $ x = f x
 
 -- iterate: figure it out by its type
 iterate :: (a -> a) -> a -> [a]
-iterate = undefined
+iterate f x = x : iterate f (f x)
 
 -- orbit
+orbit :: a -> (a -> a) -> [a]
 orbit = flip iterate
-
