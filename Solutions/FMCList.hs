@@ -174,7 +174,13 @@ infixl 5 +++
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
-palindrome = undefined
+palindrome xs =
+  let normalized = normalize xs
+  in length normalized > 1 && normalized == reverse normalized
+  
+-- normalize cleans the String so palindrome can work correctly
+normalize :: String -> String
+normalize = L.map C.toLower . L.filter C.isAlpha
 
 {-
 
