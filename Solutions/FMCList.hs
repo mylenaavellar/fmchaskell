@@ -106,14 +106,21 @@ snoc x (y : ys) = y : snoc x ys
 (+++) :: [a] -> [a] -> [a]
 xs +++ []     = xs
 xs +++ [y]    = xs <: y
-xs +++ (y:ys) = (xs +++ [y]) +++ ys
+xs +++ (y : ys) = (xs +++ [y]) +++ ys
 
 -- left-associative for performance!
 -- (hmm?!)
 infixl 5 +++
 
 -- minimum :: Ord a => [a] -> a
+minimum [] = error "no minimum in nil"
+minimum [x] = x
+minimum (x : xs) = min x (minimum xs)
+
 -- maximum :: Ord a => [a] -> a
+maximum [] = error "no maximum in nil"
+maximum [x] = x
+maximum (x : xs) = max x (maximum xs)
 
 -- take
 -- drop
