@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module ExList where
+module FMCFun where
 
 import Prelude hiding
     ( (.) , ($)

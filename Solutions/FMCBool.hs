@@ -1,4 +1,4 @@
-module ExBool where
+module FMCBool where
 
 -- Do not alter this import!
 import Prelude
