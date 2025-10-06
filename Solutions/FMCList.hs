@@ -151,9 +151,13 @@ inits (x : xs) = [] : map (x :) (inits xs)
 
 -- subsequences
 
--- any
+any :: (a -> Bool) -> [a] -> Bool
+any _ [] = False
+any p (x : xs) = p x || any p xs
 
--- all
+all :: (a -> Bool) -> [a] -> Bool
+all _ [] = True
+all p (x : xs) = p x && all p xs
 
 and :: [Bool] -> Bool
 and [] = True
@@ -168,11 +172,25 @@ concat [] = []
 concat (xs : ys) = xs ++ concat ys
 
 -- elem using the function 'any' above
+elem :: Eq a => a -> [a] -> Bool
+elem x xs = any (== x) xs
 
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
+elem' :: Eq a => a -> [a] -> Bool
+elem' _ [] = False
+elem' x (y : ys) =
+  case x == y of
+    True  -> True
+    False -> elem' x ys
 
--- (!!)
+(!!) :: Int -> [a] -> a
+_ !! [] = error "no index in nil"
+0 !! (x : _) = x
+n !! (_ : xs) =
+  case n > 0 of
+    True  -> (n - 1) !! xs
+    False -> error "no negative index"
 
 filter :: (a -> Bool) -> [a] -> [a]
 filter _ [] = []
@@ -195,9 +213,26 @@ repeat x = x : repeat x
 replicate :: Int -> a -> [a]
 replicate x n = take x (repeat n)
 
--- isPrefixOf
--- isInfixOf
--- isSuffixOf
+isPrefixOf :: Eq a => [a] -> [a] -> Bool
+[] `isPrefixOf` _ = True
+_ `isPrefixOf` [] = False
+(x : xs) `isPrefixOf` (y : ys) =
+  case x == y of
+    True  -> xs `isPrefixOf` ys
+    False -> False
+
+isInfixOf :: Eq a => [a] -> [a] -> Bool
+[] `isInfixOf` _ = True
+_ `isInfixOf` [] = False
+(x : xs) `isInfixOf` ys =
+  case (x : xs) `isPrefixOf` ys of
+    True  -> True
+    False -> (x : xs) `isInfixOf` (tail ys)
+
+isSuffixOf :: Eq a => [a] -> [a] -> Bool
+[] `isSuffixOf` _ = True
+_ `isSuffixOf` [] = False
+xs `isSuffixOf` ys = (reverse xs) `isPrefixOf` (reverse ys)
 
 -- zip
 -- zipWith
@@ -205,12 +240,21 @@ replicate x n = take x (repeat n)
 -- intercalate
 -- nub
 
--- splitAt
+splitAt :: Int -> [a] -> ([a], [a])
+splitAt 0 xs = ([], xs)
+splitAt _ [] = ([], [])
+splitAt n (x : xs) =
+  case n > 0 of
+    True  -> let (ys, zs) = splitAt (n - 1) xs in (x : ys, zs)
+    False -> ([], x : xs)
+
 -- what is the problem with the following?:
 -- splitAt n xs  =  (take n xs, drop n xs)
+-- resposta: se n for maior que lenght xs, não funciona
 
 -- break
 
+-- fazer para usar no palindrome depois:
 -- lines
 -- words
 -- unlines
