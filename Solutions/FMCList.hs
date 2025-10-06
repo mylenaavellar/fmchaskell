@@ -155,14 +155,19 @@ inits (x : xs) = [] : map (x :) (inits xs)
 
 -- all
 
--- and
--- or
+and :: [Bool] -> Bool
+and [] = True
+and (x : xs) = x && and xs
+
+or :: [Bool] -> Bool
+or [] = False
+or (x : xs) = x || or xs
 
 concat :: [[a]] -> [a]
 concat [] = []
 concat (xs : ys) = xs ++ concat ys
 
--- elem using the funciton 'any' above
+-- elem using the function 'any' above
 
 -- elem': same as elem but elementary definition
 -- (without using other functions except (==))
@@ -180,9 +185,15 @@ map :: (a -> b) -> [a] -> [b]
 map _ [] = []
 map f (x : xs) = f x : map f xs
 
--- cycle
--- repeat
--- replicate
+cycle :: [a] -> [a]
+cycle [] = error "no cycle in nil"
+cycle xs = xs ++ cycle xs
+
+repeat :: a -> [a]
+repeat x = x : repeat x
+
+replicate :: Int -> a -> [a]
+replicate x n = take x (repeat n)
 
 -- isPrefixOf
 -- isInfixOf
