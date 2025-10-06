@@ -112,35 +112,55 @@ xs +++ (y : ys) = (xs +++ [y]) +++ ys
 -- (hmm?!)
 infixl 5 +++
 
--- minimum :: Ord a => [a] -> a
+minimum :: Ord a => [a] -> a
 minimum [] = error "no minimum in nil"
 minimum [x] = x
 minimum (x : xs) = min x (minimum xs)
 
--- maximum :: Ord a => [a] -> a
+maximum :: Ord a => [a] -> a
 maximum [] = error "no maximum in nil"
 maximum [x] = x
 maximum (x : xs) = max x (maximum xs)
 
--- take
--- drop
+take :: Int -> [a] -> [a]
+take 0 _ = []
+take _ [] = []
+take n (x : xs) = x : take (n - 1) xs
+
+drop :: Int -> [a] -> [a]
+drop 0 xs = xs
+drop _ [] = []
+drop n (x : xs) = drop (n - 1) xs
 
 -- takeWhile
+
 -- dropWhile
 
--- tails
--- init
--- inits
+tails :: [a] -> [[a]]
+tails [] = [[]]
+tails (x : xs) = (x : xs) : tails xs
+
+init :: [a] -> [a]
+init [] = error "no init in nil"
+init [_] = []
+init (x : xs) = x : init xs
+
+inits :: [a] -> [[a]]
+inits [] = [[]]
+inits (x : xs) = [] : map (x :) (inits xs)
 
 -- subsequences
 
 -- any
+
 -- all
 
 -- and
 -- or
 
--- concat
+concat :: [[a]] -> [a]
+concat [] = []
+concat (xs : ys) = xs ++ concat ys
 
 -- elem using the funciton 'any' above
 
@@ -149,8 +169,16 @@ maximum (x : xs) = max x (maximum xs)
 
 -- (!!)
 
--- filter
--- map
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ [] = []
+filter p (x : xs) =
+  case p x of
+    True  -> x : filter p xs
+    False -> filter p xs
+
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x : xs) = f x : map f xs
 
 -- cycle
 -- repeat
